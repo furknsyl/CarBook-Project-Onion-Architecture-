@@ -1,5 +1,6 @@
 ﻿using CarBook.Application.Interfaces.StatisticsInterfaces;
 using CarBook.Persistence.Context;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +13,30 @@ namespace CarBook.Persistence.Repositories.StatisticsRepositories
     {
         private readonly CarBookContext _context;
 
-        public StatisticsRepository(CarBookContext context)
+        public string GetBlogTitleByMaxBlogComment()
         {
-            _context = context;
+            var values = _context.Comments.GroupBy(x => x.BlogID).
+                              Select(y => new
+                              {
+                                  BlogID = y.Key,
+                                  Count = y.Count()
+                              }).OrderByDescending(z => z.Count).Take(1).FirstOrDefault();
+            string blogName = _context.Blogs.Where(x => x.BlogID == values.BlogID).Select(y => y.Title).FirstOrDefault();
+            return blogName;
         }
+
+        public string GetBrandNameByMaxCar()
+        {
+            var values = _context.Cars.GroupBy(x => x.BrandID).
+                             Select(y => new
+                             {
+                                 BrandID = y.Key,
+                                 Count = y.Count()
+                             }).OrderByDescending(z => z.Count).Take(1).FirstOrDefault();
+            string brandName = _context.Brands.Where(x => x.BrandID == values.BrandID).Select(y => y.Name).FirstOrDefault();
+            return brandName;
+        }
+
         public int GetAuthorCount()
         {
             var value = _context.Authors.Count();
@@ -49,30 +70,28 @@ namespace CarBook.Persistence.Repositories.StatisticsRepositories
             return value;
         }
 
-        public string GetBlogTitleByMaxBlogComment()
-        {
-            throw new NotImplementedException();
-        }
-
         public int GetBrandCount()
         {
             var value = _context.Brands.Count();
             return value;
         }
 
-        public string GetBrandNameByMaxCar()
-        {
-            throw new NotImplementedException();
-        }
-
         public string GetCarBrandAndModelByRentPriceDailyMax()
         {
-            throw new NotImplementedException();
+            int pricingID = _context.Pricings.Where(x => x.Name == "Günlük").Select(y => y.PricingID).FirstOrDefault();
+            decimal amount = _context.CarPricings.Where(y => y.PricingID == pricingID).Max(x => x.Amount);
+            int carId = _context.CarPricings.Where(x => x.Amount == amount).Select(y => y.CarID).FirstOrDefault();
+            string brandModel = _context.Cars.Where(x => x.CarID == carId).Include(y => y.Brand).Select(z => z.Brand.Name + " " + z.Model).FirstOrDefault();
+            return brandModel;
         }
 
         public string GetCarBrandAndModelByRentPriceDailyMin()
         {
-            throw new NotImplementedException();
+            int pricingID = _context.Pricings.Where(x => x.Name == "Günlük").Select(y => y.PricingID).FirstOrDefault();
+            decimal amount = _context.CarPricings.Where(y => y.PricingID == pricingID).Min(x => x.Amount);
+            int carId = _context.CarPricings.Where(x => x.Amount == amount).Select(y => y.CarID).FirstOrDefault();
+            string brandModel = _context.Cars.Where(x => x.CarID == carId).Include(y => y.Brand).Select(z => z.Brand.Name + " " + z.Model).FirstOrDefault();
+            return brandModel;
         }
 
         public int GetCarCount()
@@ -83,22 +102,26 @@ namespace CarBook.Persistence.Repositories.StatisticsRepositories
 
         public int GetCarCountByFuelElectric()
         {
-            throw new NotImplementedException();
+            var value = _context.Cars.Where(x => x.Fuel == "Elektrik").Count();
+            return value;
         }
 
         public int GetCarCountByFuelGasolineOrDiesel()
         {
-            throw new NotImplementedException();
+            var value = _context.Cars.Where(x => x.Fuel == "Benzin" || x.Fuel == "Dizel").Count();
+            return value;
         }
 
         public int GetCarCountByKmSmallerThen1000()
         {
-            throw new NotImplementedException();
+            var value = _context.Cars.Where(x => x.Km <= 1000).Count();
+            return value;
         }
 
         public int GetCarCountByTranmissionIsAuto()
         {
-            throw new NotImplementedException();
+            var value = _context.Cars.Where(x => x.Transmission == "Otomatik").Count();
+            return value;
         }
 
         public int GetLocationCount()
