@@ -12,6 +12,10 @@ namespace CarBook.Persistence.Repositories.StatisticsRepositories
     public class StatisticsRepository : IStatisticsRepository
     {
         private readonly CarBookContext _context;
+        public StatisticsRepository(CarBookContext context)
+        {
+            _context = context;
+        }
 
         public string GetBlogTitleByMaxBlogComment()
         {

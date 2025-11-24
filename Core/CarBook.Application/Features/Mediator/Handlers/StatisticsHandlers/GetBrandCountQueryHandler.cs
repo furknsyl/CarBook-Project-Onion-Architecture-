@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UdemyCarBook.Application.Features.Mediator.Queries.StatisticsQueries;
-using UdemyCarBook.Application.Features.Mediator.Results.StatisticsResults;
-using UdemyCarBook.Application.Interfaces.StatisticsInterfaces;
+using CarBook.Application.Features.Mediator.Queries.StatisticsQueries;
+using CarBook.Application.Features.Mediator.Results.StatisticsResults;
+using CarBook.Application.Interfaces.StatisticsInterfaces;
 
-namespace UdemyCarBook.Application.Features.Mediator.Handlers.StatisticsHandlers
+namespace CarBook.Application.Features.Mediator.Handlers.StatisticsHandlers
 {
     public class GetBrandCountQueryHandler : IRequestHandler<GetBrandCountQuery, GetBrandCountQueryResult>
     {
