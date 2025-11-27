@@ -11,28 +11,35 @@
   opacity: 0.8; }
 
 .mfp-wrap {
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1043;
-  position: fixed;
-  outline: none !important;
-  -webkit-backface-visibility: hidden; }
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1043;
+    position: fixed;
+    outline: none !important;
+    -webkit-backface-visibility: hidden;
+    display: flex !important;
+    align-items: flex-start !important; /* üstte hizala */
+    justify-content: center !important;
+}
 
 .mfp-container {
-  text-align: center;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  left: 0;
-  top: 0;
-  padding: 0 8px;
-  box-sizing: border-box; }
+    text-align: center;
+    position: absolute;
+    width: 100%;
+    height: auto !important; /* vertical-align tamponunu kaldýr */
+    left: 0;
+    top: 0;
+    padding: 0 8px !important;
+    box-sizing: border-box;
+    display: block !important; /* inline-block yerine block */
+    text-align: center !important;
+}
 
 .mfp-container:before {
   content: '';
-  display: inline-block;
+  display: none !important;         /* vertical-align için kullanýlan boþ elementi kaldýr */
   height: 100%;
   vertical-align: middle; }
 
@@ -40,17 +47,21 @@
   display: none; }
 
 .mfp-content {
-  position: relative;
-  display: inline-block;
-  vertical-align: middle;
-  margin: 0 auto;
-  text-align: left;
-  z-index: 1045; }
+    position: relative;
+    display: inline-block;
+    vertical-align: top !important;
+    margin: 0 auto;
+    text-align: left;
+    z-index: 1045;
+    margin-top: 20px !important;
+}
 
 .mfp-inline-holder .mfp-content,
 .mfp-ajax-holder .mfp-content {
-  width: 100%;
-  cursor: auto; }
+    width: 100% !important;
+    cursor: auto;
+    max-width: 900px !important;
+}
 
 .mfp-ajax-cur {
   cursor: progress; }
