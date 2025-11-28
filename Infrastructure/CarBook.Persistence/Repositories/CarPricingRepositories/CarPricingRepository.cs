@@ -1,4 +1,5 @@
 ﻿using CarBook.Application.Interfaces.CarPricingInterfaces;
+using CarBook.Application.ViewModels;
 using CarBook.Domain.Entities;
 using CarBook.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
@@ -27,5 +28,37 @@ namespace CarBook.Persistence.Repositories.CarPricingRepositories
 		{
 			throw new NotImplementedException();
 		}
-	}
+
+        public List<CarPricingViewModel> GetCarPricingWithTimePeriod1()
+        {
+            List<CarPricingViewModel> values = new List<CarPricingViewModel>();
+            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "Select Model,Name,CoverImageUrl,ISNULL([2],0) as [2],ISNULL([3],0) as [3],ISNULL([4],0) as [4] From (Select Model,Name,CoverImageUrl,PricingID,Amount From CarPricings Inner Join Cars On Cars.CarID=CarPricings.CarId Inner Join Brands On Brands.BrandID=Cars.BrandID) As SourceTable Pivot (Sum(Amount) For PricingID In ([2],[3],[4])) as PivotTable;\r\n";
+                command.CommandType = System.Data.CommandType.Text;
+                _context.Database.OpenConnection();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        CarPricingViewModel carPricingViewModel = new CarPricingViewModel()
+                        {
+                            Brand = reader["Name"].ToString(),
+                            Model = reader["Model"].ToString(),
+                            CoverImageUrl = reader["CoverImageUrl"].ToString(),
+                            Amounts = new List<decimal>
+                            {
+                                Convert.ToDecimal(reader["2"]),
+                                Convert.ToDecimal(reader["3"]),
+                                Convert.ToDecimal(reader["4"])
+                            }
+                        };
+                        values.Add(carPricingViewModel);
+                    }
+                }
+                _context.Database.CloseConnection();
+                return values;
+            }
+        }
+    }
 }
