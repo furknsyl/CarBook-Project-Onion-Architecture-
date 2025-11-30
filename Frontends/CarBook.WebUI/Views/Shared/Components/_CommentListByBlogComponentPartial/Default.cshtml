@@ -1,18 +1,62 @@
 ﻿@model List<ResultCommentDto>
 
+
+
+<h3 class="mb-5">@ViewBag.commentCount Yorum</h3>
+
+
+
 <ul class="comment-list">
 
-    @foreach(var item in Model)
+    @foreach (var item in Model)
+
     {
+
         <li class="comment">
+
             <div class="vcard bio">
-                <img src="~/carbook-master/images/person_1.jpg" alt="Image placeholder">
+
+
+
+                <div class="vcard bio">
+
+                    <div class="avatar">@item.NameInitials</div>
+
+                </div>
+
             </div>
+
             <div class="comment-body">
+
                 <h3>@item.Name</h3>
-                <div class="meta">@(((DateTime)item.CreatedDate).ToString("dd-MMM-yyyy"))</div>
+
+                <div class="meta">@item.CreatedDate.ToString("dd-MMM-yyyy")</div>
+
                 <p>@item.Description</p>
+
             </div>
+
         </li>
+
     }
+
 </ul>
+
+
+
+<style>
+
+    .avatar {
+        width: 45px;
+        height: 45px;
+        background: #4C6EF5;
+        color: white;
+        font-weight: bold;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        text-transform: uppercase;
+    }
+</style>
