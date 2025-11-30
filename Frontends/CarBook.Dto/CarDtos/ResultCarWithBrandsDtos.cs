@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CarBook.Dto.CarDtos
 {
-    public class ResultCarWithBrandDto
+    public class ResultCarWithBrandsDtos
     {
         public int CarID { get; set; }
         public int BrandID { get; set; }

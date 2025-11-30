@@ -1,0 +1,270 @@
+﻿@model List<CarBook.Dto.CarFeatureDtos.ResultCarFeatureByCarIdDto>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="page-content">
+
+    <div class="container-fluid">
+
+        <div class="row">
+
+            <div class="col-xl-12">
+
+                <div class="card shadow-sm border-0 rounded-3">
+
+                    <div class="xacton-features-page">
+
+                        <h3 class="xf-title">Araca Ait Özellikler Listesi</h3>
+
+                        <p class="xf-sub">Araca ait özellik eklemesi yapabilir, mevcut özellikleri kaldırabilir, ilgili güncellemeleri gerçekleştirebilirsiniz.</p>
+
+
+
+                        <form method="post">
+
+                            <div class="xf-grid">
+
+
+
+                                @foreach (var item in Model)
+
+                                {
+
+                                    <div class="xf-card">
+
+
+
+                                        <div class="xf-info">
+
+                                            <span class="xf-name">@item.FeatureName</span>
+
+                                            <span class="xf-desc">Bu özellik araç için kullanılabilir.</span>
+
+                                        </div>
+
+
+
+                                        <label class="xf-switch">
+
+                                            <input type="hidden" name="CarFeatureID" value="@item.CarFeatureID" />
+
+                                            <input type="checkbox" name="Available" @(item.Available ? "checked" : "") />
+
+                                            <span class="xf-slider"></span>
+
+                                        </label>
+
+
+
+                                    </div>
+
+                                }
+
+                            </div>
+
+                            <button class="xf-btn">Değişiklikleri Kaydet</button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+    document.querySelectorAll('.xf-card').forEach(card => {
+
+        card.addEventListener('click', function (e) {
+
+
+
+            // Eğer slider veya checkbox'a direkt basıldıysa 2 kere tetiklenmesin
+
+            if (e.target.tagName === 'INPUT' || e.target.classList.contains('xf-slider')) {
+
+                return;
+
+            }
+
+
+
+            const checkbox = this.querySelector('input[type="checkbox"]');
+
+            checkbox.checked = !checkbox.checked;
+
+
+
+            // Manuel class tetikleme için input change event'i
+
+            checkbox.dispatchEvent(new Event('change'));
+
+        });
+
+    });
+
+</script>
+
+<style>
+
+
+
+    .xacton-features-page {
+        background: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+    }
+
+
+
+    .xf-title {
+        font-size: 22px;
+        font-weight: 600;
+        margin-bottom: 5px;
+        color: #2f4050;
+    }
+
+
+
+    .xf-sub {
+        margin-bottom: 25px;
+        color: #7c8a9b;
+        font-size: 14px;
+    }
+
+
+
+    .xf-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+        gap: 16px;
+    }
+
+
+
+    .xf-card {
+        background: #f9fafb;
+        border: 1px solid #e2e6ea;
+        border-radius: 10px;
+        padding: 18px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: .25s;
+    }
+
+
+
+        .xf-card:hover {
+            background: #ffffff;
+            border-color: #d0d5da;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+
+
+    .xf-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+
+
+    .xf-name {
+        font-size: 15px;
+        font-weight: 600;
+        color: #2f4050;
+    }
+
+
+
+    .xf-desc {
+        font-size: 12px;
+        color: #98a4b3;
+        margin-top: 3px;
+    }
+
+
+
+    .xf-switch {
+        position: relative;
+        display: inline-block;
+        width: 46px;
+        height: 24px;
+        flex-shrink: 0;
+    }
+
+
+
+        .xf-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+
+
+    .xf-slider {
+        position: absolute;
+        cursor: pointer;
+        inset: 0;
+        background-color: #c9cfd6;
+        transition: .25s;
+        border-radius: 30px;
+    }
+
+
+
+        .xf-slider:before {
+            content: "";
+            position: absolute;
+            height: 20px;
+            width: 20px;
+            left: 2px;
+            top: 2px;
+            background-color: white;
+            transition: .25s;
+            border-radius: 50%;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+        }
+
+
+
+    .xf-switch input:checked + .xf-slider {
+        background-color: #1ab394;
+    }
+
+        .xf-switch input:checked + .xf-slider:before {
+            transform: translateX(22px);
+        }
+
+
+
+    .xf-btn {
+        margin-top: 25px;
+        background: #1ab394;
+        color: #fff;
+        padding: 10px 26px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 15px;
+        transition: .25s;
+    }
+
+        .xf-btn:hover {
+            background: #18a285;
+        }
+
+</style>
