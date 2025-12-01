@@ -1,0 +1,215 @@
+﻿@model List<ResultFeatureDto>
+
+@{
+
+    ViewData["Title"] = "CreateCarFeatureByCarID";
+
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+
+}
+
+
+
+<div class="page-content">
+
+    <div class="container-fluid">
+
+        <div class="row">
+
+            <div class="col-xl-12">
+
+                <div class="card shadow-sm border-0 rounded-3">
+
+                    <div class="xacton-features-page">
+
+                        <h3 class="xf-title">Araca Ait Özellikler Ekleme Sayfası</h3>
+
+                        <p class="xf-sub">Araca ait özellik tanımlaması yapılacak sayfadır.</p>
+
+
+
+                        <form method="post" asp-action="CreateCarFeatureByCarID">
+
+                            <input type="hidden" name="carId" value="@ViewBag.CarId" />
+
+
+
+                            <div class="cf-grid">
+
+                                @foreach (var item in Model)
+
+                                {
+
+                                    <div class="cf-item" onclick="toggleFeature(this)">
+
+                                        <input type="checkbox" name="selectedFeatureIds" value="@item.FeatureID" />
+
+                                        <div class="cf-name">@item.Name</div>
+
+                                    </div>
+
+                                }
+
+                            </div>
+
+
+
+                            <button type="submit" class="cf-btn">Kaydet</button>
+
+                        </form>
+
+
+
+                        <script>
+
+                            function toggleFeature(item) {
+
+                                const cb = item.querySelector("input[type='checkbox']");
+
+                                cb.checked = !cb.checked;
+
+
+
+                                item.classList.toggle("active", cb.checked);
+
+                            }
+
+                        </script>
+
+
+
+                        <style>
+
+                            .cf-item {
+                                padding: 14px 18px;
+                                border: 2px solid #d0d5da;
+                                border-radius: 10px;
+                                cursor: pointer;
+                                background: #f9fafb;
+                                display: flex;
+                                align-items: center;
+                                gap: 12px;
+                                position: relative;
+                            }
+
+
+
+                                .cf-item input[type='checkbox'] {
+                                    position: absolute;
+                                    left: -9999px;
+                                }
+
+
+
+                                .cf-item.active {
+                                    border-color: #1ab394;
+                                    background: #f0fcf8;
+                                }
+
+                        </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<style>
+
+    .cf-title {
+        font-size: 22px;
+        font-weight: 600;
+        color: #2f4050;
+    }
+
+
+
+    .cf-sub {
+        color: #7c8a9b;
+        margin-bottom: 20px;
+    }
+
+
+
+    .cf-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 14px;
+    }
+
+
+
+    .cf-item {
+        padding: 14px 18px;
+        border: 2px solid #d0d5da;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: .22s;
+        background: #f9fafb;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+
+
+        .cf-item:hover {
+            border-color: #a7b1c2;
+        }
+
+
+
+        .cf-item.active {
+            border-color: #1ab394;
+            background: #f0fcf8;
+        }
+
+
+
+        .cf-item input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+        }
+
+
+
+
+
+    .cf-name {
+        color: #2f4050;
+        font-weight: 500;
+    }
+
+
+
+    .cf-btn {
+        margin-top: 20px;
+        background-color: #1ab394;
+        color: white;
+        padding: 10px 20px;
+        font-weight: 600;
+        border: none;
+        border-radius: 8px;
+    }
+
+</style>

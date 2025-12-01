@@ -19,7 +19,7 @@
 
                         <h3 class="xf-title">Araca Ait Özellikler Listesi</h3>
 
-                        <p class="xf-sub">Araca ait özellik eklemesi yapabilir, mevcut özellikleri kaldırabilir, ilgili güncellemeleri gerçekleştirebilirsiniz.</p>
+                        <p class="xf-sub">Araca ait özellik eklemesi yapabilir, mevcut özellikleri kaldırabilir ve güncellemeleri gerçekleştirebilirsiniz.</p>
 
 
 
@@ -27,40 +27,26 @@
 
                             <div class="xf-grid">
 
-
-
-                                @foreach (var item in Model)
-
+                                @for (int i = 0; i < Model.Count; i++)
                                 {
-
                                     <div class="xf-card">
 
-
-
                                         <div class="xf-info">
-
-                                            <span class="xf-name">@item.FeatureName</span>
-
+                                            <span class="xf-name">@Model[i].FeatureName</span>
                                             <span class="xf-desc">Bu özellik araç için kullanılabilir.</span>
-
                                         </div>
-
-
 
                                         <label class="xf-switch">
 
-                                            <input type="hidden" name="CarFeatureID" value="@item.CarFeatureID" />
+                                            <input type="hidden" asp-for="@Model[i].CarFeatureID" />
+                                            <input type="hidden" asp-for="@Model[i].FeatureName" />
 
-                                            <input type="checkbox" name="Available" @(item.Available ? "checked" : "") />
-
+                                            <input type="checkbox" asp-for="@Model[i].Available" />
                                             <span class="xf-slider"></span>
 
                                         </label>
 
-
-
                                     </div>
-
                                 }
 
                             </div>
@@ -81,43 +67,28 @@
 
 </div>
 
+
 <script>
-
     document.querySelectorAll('.xf-card').forEach(card => {
-
         card.addEventListener('click', function (e) {
 
-
-
-            // Eğer slider veya checkbox'a direkt basıldıysa 2 kere tetiklenmesin
-
+            // Eğer direk checkbox veya slider'a tıklandıysa 2 kez tetikleme olmasın
             if (e.target.tagName === 'INPUT' || e.target.classList.contains('xf-slider')) {
-
                 return;
-
             }
 
-
-
             const checkbox = this.querySelector('input[type="checkbox"]');
-
             checkbox.checked = !checkbox.checked;
 
-
-
-            // Manuel class tetikleme için input change event'i
-
+            // UI animasyonları tetiklensin
             checkbox.dispatchEvent(new Event('change'));
-
         });
-
     });
-
 </script>
 
+
+
 <style>
-
-
 
     .xacton-features-page {
         background: #fff;
@@ -126,8 +97,6 @@
         box-shadow: 0 3px 10px rgba(0,0,0,0.05);
     }
 
-
-
     .xf-title {
         font-size: 22px;
         font-weight: 600;
@@ -135,23 +104,17 @@
         color: #2f4050;
     }
 
-
-
     .xf-sub {
         margin-bottom: 25px;
         color: #7c8a9b;
         font-size: 14px;
     }
 
-
-
     .xf-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
         gap: 16px;
     }
-
-
 
     .xf-card {
         background: #f9fafb;
@@ -162,9 +125,8 @@
         justify-content: space-between;
         align-items: center;
         transition: .25s;
+        cursor: pointer;
     }
-
-
 
         .xf-card:hover {
             background: #ffffff;
@@ -172,14 +134,10 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
 
-
-
     .xf-info {
         display: flex;
         flex-direction: column;
     }
-
-
 
     .xf-name {
         font-size: 15px;
@@ -187,15 +145,11 @@
         color: #2f4050;
     }
 
-
-
     .xf-desc {
         font-size: 12px;
         color: #98a4b3;
         margin-top: 3px;
     }
-
-
 
     .xf-switch {
         position: relative;
@@ -205,15 +159,11 @@
         flex-shrink: 0;
     }
 
-
-
         .xf-switch input {
             opacity: 0;
             width: 0;
             height: 0;
         }
-
-
 
     .xf-slider {
         position: absolute;
@@ -223,8 +173,6 @@
         transition: .25s;
         border-radius: 30px;
     }
-
-
 
         .xf-slider:before {
             content: "";
@@ -239,8 +187,6 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.25);
         }
 
-
-
     .xf-switch input:checked + .xf-slider {
         background-color: #1ab394;
     }
@@ -248,8 +194,6 @@
         .xf-switch input:checked + .xf-slider:before {
             transform: translateX(22px);
         }
-
-
 
     .xf-btn {
         margin-top: 25px;

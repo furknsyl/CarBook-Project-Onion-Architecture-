@@ -53,19 +53,102 @@ namespace CarBook.WebUI.Areas.Admin.Controllers
             return RedirectToAction("Index", "AdminCar");
         }
 
-        [Route("CreateFeatureByCarId")]
         [HttpGet]
-        public async Task<IActionResult> CreateFeatureByCarId()
+        [Route("CreateCarFeatureByCarID/{id}")]
+
+        public async Task<ActionResult> CreateCarFeatureByCarID(int id)
+
         {
+
+            ViewBag.CarId = id;
+
+
+
             var client = _httpClientFactory.CreateClient();
-            var responseMessage = await client.GetAsync("https://localhost:7158/api/Features");
-            if (responseMessage.IsSuccessStatusCode)
+
+
+
+            // 1. Tüm özellikler
+
+            var response = await client.GetAsync("https://localhost:7158/api/Features");
+
+            if (!response.IsSuccessStatusCode)
+
+                return View(new List<ResultFeatureDto>());
+
+
+
+            var json = await response.Content.ReadAsStringAsync();
+
+            var allFeatures = JsonConvert.DeserializeObject<List<ResultFeatureDto>>(json);
+
+
+
+            // 2. CarFeature tablosundan zaten atanmış olan featureId’ler
+
+            var responseCarFeatures = await client.GetAsync($"https://localhost:7158/api/CarFeatures?carId={id}");
+
+            var carFeaturesJson = await responseCarFeatures.Content.ReadAsStringAsync();
+
+            var assignedFeatures = JsonConvert.DeserializeObject<List<ResultCarFeatureByCarIdDto>>(carFeaturesJson);
+
+
+
+            var assignedFeatureIds = assignedFeatures.Select(x => x.FeatureID).ToHashSet();
+
+
+
+            // 3. Sadece atanmamış olan özellikleri gönder
+
+            var featuresToShow = allFeatures.Where(f => !assignedFeatureIds.Contains(f.FeatureID)).ToList();
+
+
+
+            return View(featuresToShow);
+
+        }
+
+
+
+        [HttpPost]
+        [Route("CreateCarFeatureByCarID/{id}")]
+
+        public async Task<IActionResult> CreateCarFeatureByCarID(int carId, List<int> selectedFeatureIds)
+
+        {
+
+            foreach (var fid in selectedFeatureIds)
+
             {
-                var jsonData = await responseMessage.Content.ReadAsStringAsync();
-                var values = JsonConvert.DeserializeObject<List<ResultFeatureDto>>(jsonData);
-                return View(values);
+
+                var dto = new CreateCarFeatureDto
+
+                {
+
+                    CarID = carId,
+
+                    FeatureID = fid,
+
+                    Available = false
+
+                };
+
+                var client = _httpClientFactory.CreateClient();
+
+                var json = JsonConvert.SerializeObject(dto);
+
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+
+
+                await client.PostAsync("https://localhost:7158/api/CarFeatures", content);
+
             }
-            return View();
+
+
+
+            return RedirectToAction("Index", "AdminCar");
+
         }
     }
 }
