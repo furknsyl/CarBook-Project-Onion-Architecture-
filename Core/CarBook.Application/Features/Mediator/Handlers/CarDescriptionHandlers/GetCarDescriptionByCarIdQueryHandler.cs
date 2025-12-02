@@ -23,11 +23,18 @@ namespace CarBook.Application.Features.Mediator.Handlers.CarDescriptionHandlers
         public async Task<GetCarDescriptionQueryResult> Handle(GetCarDescriptionByCarIdQuery request, CancellationToken cancellationToken)
         {
             var values = await _repository.GetCarDescription(request.Id);
+
+            if (values == null)
+            {
+                // Null ise uygun bir şekilde dön
+                return null; // veya default değerler dönebilirsin
+            }
+
             return new GetCarDescriptionQueryResult
             {
                 CarDescriptionID = values.CarDescriptionID,
                 CarID = values.CarID,
-                Details = values.Details
+                Details = values.Details ?? ""  // Details null olabilir, boş string ata
             };
         }
     }

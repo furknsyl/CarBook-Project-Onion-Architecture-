@@ -14,16 +14,34 @@ namespace CarBook.WebUI.ViewComponents.CarDetailViewComponents
 
 		public async Task<IViewComponentResult> InvokeAsync(int id)
 		{
-			ViewBag.carid = id;
-			var client = _httpClientFactory.CreateClient();
-			var resposenMessage = await client.GetAsync($"https://localhost:7158/api/CarDescriptions?id=" + id);
-			if (resposenMessage.IsSuccessStatusCode)
-			{
-				var jsonData = await resposenMessage.Content.ReadAsStringAsync();
-				var values = JsonConvert.DeserializeObject<ResultCarDescriptionByCarIdDto>(jsonData);
-				return View(values);
-			}
-			return View();
-		}
+            ViewBag.carid = id;
+            var client = _httpClientFactory.CreateClient();
+            var responseMessage = await client.GetAsync($"https://localhost:7158/api/CarDescriptions?id=" + id);
+
+            ResultCarDescriptionByCarIdDto values = null;
+
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                var jsonData = await responseMessage.Content.ReadAsStringAsync();
+
+                if (!string.IsNullOrWhiteSpace(jsonData))
+                {
+                    values = JsonConvert.DeserializeObject<ResultCarDescriptionByCarIdDto>(jsonData);
+                }
+            }
+
+            // Eğer values hala null ise, default değer ata
+            if (values == null)
+            {
+                values = new ResultCarDescriptionByCarIdDto
+                {
+                    CarDescriptionID = 0,
+                    CarID = id,
+                    Details = "Araç açıklaması bulunamadı."
+                };
+            }
+
+            return View(values);
+        }
 	}
 }

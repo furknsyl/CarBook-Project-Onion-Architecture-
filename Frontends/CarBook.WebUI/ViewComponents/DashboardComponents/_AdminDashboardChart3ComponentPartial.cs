@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace CarBook.WebUI.ViewComponents.CarDetailViewComponents
+namespace CarBook.WebUI.ViewComponents.DashboardComponents
 {
-    public class _CarDetailTabPaneComponentPartial:ViewComponent
+    public class _AdminDashboardChart3ComponentPartial:ViewComponent
     {
         public IViewComponentResult Invoke()
         {
