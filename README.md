@@ -58,7 +58,6 @@ Projeye Ait Bazı Görseller :
 
 <img width="1510" height="790" alt="image" src="https://github.com/user-attachments/assets/fbf6b9a5-f6bd-4a0c-9cc0-30b8ec297db3" />
 
-<img width="1510" height="790" alt="image" src="https://github.com/user-attachments/assets/009091e2-1242-4149-bb63-b8a227b7f5bf" />
 
 
 
