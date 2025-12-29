@@ -30,10 +30,10 @@ namespace CarBook.Persistence.Repositories
             return await _context.Set<T>().ToListAsync();
         }
 
-        public Task<T?> GetByFilterAsync(Expression<Func<T, bool>> filter)
+        public async Task<T?> GetByFilterAsync(Expression<Func<T, bool>> filter)
         {
-            throw new NotImplementedException();
-        }
+			return await _context.Set<T>().SingleOrDefaultAsync(filter);
+		}
 
         public async Task<T> GetByIdAsync(int id)
         {
